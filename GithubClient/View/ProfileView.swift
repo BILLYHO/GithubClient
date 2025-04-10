@@ -166,7 +166,7 @@ struct ProfileView: View {
                     VStack {
                         Text("\(viewModel.followersCount)")
                             .font(.headline)
-                        Text("关注者")
+                        Text(LocalizedStringKey("info.follower"))
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
@@ -174,7 +174,7 @@ struct ProfileView: View {
                     VStack {
                         Text("\(viewModel.followingCount)")
                             .font(.headline)
-                        Text("关注中")
+                        Text(LocalizedStringKey("info.following"))
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
@@ -182,7 +182,7 @@ struct ProfileView: View {
                     VStack {
                         Text("\(viewModel.reposCount)")
                             .font(.headline)
-                        Text("仓库")
+                        Text(LocalizedStringKey("info.repo"))
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
@@ -193,10 +193,8 @@ struct ProfileView: View {
                 if viewModel.isBiometricAuthAvailable && !viewModel.isAuthenticated {
                     Button(action: viewModel.authenticateWithBiometrics) {
                         HStack {
-                            Image(
-                                systemName: viewModel.isBiometricAuthEnabled
-                                    ? "checkmark.circle.fill" : "touchid")
-                            Text(viewModel.isBiometricAuthEnabled ? "已启用生物识别" : "启用生物识别")
+                            Image(systemName:"faceid")
+                            Text(LocalizedStringKey("biometrics"))
                         }
                         .padding()
                         .background(Color.blue)
@@ -209,7 +207,7 @@ struct ProfileView: View {
                 Button(action: viewModel.handleLoginLogout) {
                     HStack {
                         Image(systemName: viewModel.isAuthenticated ? "lock.fill" : "person.fill")
-                        Text(viewModel.isAuthenticated ? "登出" : "登录")
+                        Text(viewModel.isAuthenticated ? LocalizedStringKey("logout") : LocalizedStringKey("login"))
                     }
                     .padding()
                     .background(viewModel.isAuthenticated ? Color.red : Color.green)
@@ -219,7 +217,7 @@ struct ProfileView: View {
                 .disabled(viewModel.isLoggingOut)
             }
             .padding()
-            .navigationTitle("个人主页")
+            .navigationTitle("tab.profile")
             .sheet(isPresented: $viewModel.showSafari) {
                 SafariView(
                     url: URL(

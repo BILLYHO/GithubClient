@@ -61,7 +61,7 @@ struct HomeView: View {
                     }
                     .scrollDismissesKeyboard(.immediately)
             }
-            .navigationTitle("仓库")
+            .navigationTitle(LocalizedStringKey("tab.home"))
             .task {
                 await loadRepositories()
             }
@@ -126,7 +126,7 @@ struct SearchBar: View {
     
     var body: some View {
         HStack {
-            TextField("搜索仓库...", text: $text)
+            TextField(LocalizedStringKey("home.search"), text: $text)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal, 8)
             

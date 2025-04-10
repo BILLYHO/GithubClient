@@ -4,6 +4,83 @@
     "%lld" : {
 
     },
+    "biometrics" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启用生物识别"
+          }
+        }
+      }
+    },
+    "home.search" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索仓库"
+          }
+        }
+      }
+    },
+    "info.follower" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关注者"
+          }
+        }
+      }
+    },
+    "info.following" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关注中"
+          }
+        }
+      }
+    },
+    "info.repo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仓库"
+          }
+        }
+      }
+    },
+    "login" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录"
+          }
+        }
+      }
+    },
+    "logout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登出"
+          }
+        }
+      }
+    },
     "tab.home" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -25,33 +102,6 @@
           }
         }
       }
-    },
-    "个人主页" : {
-
-    },
-    "仓库" : {
-
-    },
-    "关注中" : {
-
-    },
-    "关注者" : {
-
-    },
-    "启用生物识别" : {
-
-    },
-    "已启用生物识别" : {
-
-    },
-    "搜索仓库..." : {
-
-    },
-    "登出" : {
-
-    },
-    "登录" : {
-
     }
   },
   "version" : "1.0"
