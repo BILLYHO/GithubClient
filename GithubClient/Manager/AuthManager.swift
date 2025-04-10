@@ -34,8 +34,17 @@ class AuthManager: ObservableObject {
         
         if let code = params?["code"] {
             print("handleCallback \(code)")
-            let notiName = NSNotification.Name(rawValue: "LoginSuccessNotification");
-            NotificationCenter.default.post(name:notiName , object: nil, userInfo: ["code": code])
+            getAccessToken(code: code, completion: {[weak self] result in
+                switch result {
+                case .success(let token):
+                    print("token \(token)")
+                    self?.notifyLogin(token: token)
+                case .failure(let error):
+                    print("Error getting access token: \(error.localizedDescription)")
+                
+            }
+                
+            })
         }
     }
     
@@ -44,8 +53,97 @@ class AuthManager: ObservableObject {
 //        isAuthenticated = false
 //        // Clear any stored tokens or credentials
 //    }
-//    
+//
+    
+    func notifyLogin(token:String) {
+        let notiName = NSNotification.Name(rawValue: "LoginSuccessNotification");
+        NotificationCenter.default.post(name:notiName , object: nil, userInfo: ["token": token])
+    }
+    
+    func getAccessToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        // GitHub OAuth token endpoint
+        guard let url = URL(string: "https://github.com/login/oauth/access_token") else {
+            completion(.failure(AuthError.invalidURL))
+            return
+        }
+        
+        // Prepare the request
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        // Request body
+        let parameters = "client_id=\(githubClientID)&client_secret=\(githubClientSecret)&code=\(code)&redirect_uri=\(redirectURI)"
+        request.httpBody = parameters.data(using: .utf8)
+                
+        
+        // Create data task
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            // Handle network error
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            // Check response
+            guard let data = data,
+                  let httpResponse = response as? HTTPURLResponse,
+                  httpResponse.statusCode == 200 else {
+                completion(.failure(AuthError.invalidResponse))
+                return
+            }
+            
+            // Decode response
+            do {
+                let tokenResponse = try JSONDecoder().decode(TokenResponse.self, from: data)
+                completion(.success(tokenResponse.accessToken))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume() // Start the task
+    }
+    
+    func getUserInfo(accessToken: String, completion: @escaping (Result<User, Error>) -> Void) {
+        // GitHub API endpoint
+        guard let url = URL(string: "https://api.github.com/user") else {
+            completion(.failure(AuthError.invalidURL))
+            return
+        }
+        
+        // Prepare the request
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("token \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        // Create data task
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            // Handle network error
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            // Check response
+            guard let data = data,
+                  let httpResponse = response as? HTTPURLResponse,
+                  httpResponse.statusCode == 200 else {
+                completion(.failure(AuthError.invalidResponse))
+                return
+            }
+            
+            // Decode response
+            do {
+                let user = try JSONDecoder().decode(User.self, from: data)
+                completion(.success(user))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
 }
+
+
 
 struct User: Codable, Identifiable {
     let id: Int
@@ -81,32 +179,28 @@ struct User: Codable, Identifiable {
 
 struct TokenResponse: Codable {
     let accessToken: String
-    let tokenType: String
-    let scope: String
     
     enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
-        case tokenType = "token_type"
-        case scope
     }
 }
 
 enum AuthError: LocalizedError {
     case invalidURL
+    case missingCode
     case invalidResponse
     case networkError
-    case decodingError
     
     var errorDescription: String? {
         switch self {
         case .invalidURL:
             return "Invalid URL"
+        case .missingCode:
+            return "Missing authorization code"
         case .invalidResponse:
             return "Invalid response from server"
         case .networkError:
             return "Network error occurred"
-        case .decodingError:
-            return "Failed to decode response"
         }
     }
 }

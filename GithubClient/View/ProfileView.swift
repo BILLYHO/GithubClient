@@ -48,16 +48,19 @@ class ProfileViewModel: ObservableObject {
     
     @objc func handleLoginSuccess(_ notification: Notification) {
         showSafari = false
-        if let userInfo = notification.userInfo,
-           let user = userInfo["user"] as? [String: Any],
-           let username = user["login"] as? String,
-           let avatarURLString = user["avatar_url"] as? String,
-           let avatarURL = URL(string: avatarURLString) {
-            
-            self.username = "@\(username)"
-            self.avatarURL = avatarURL
-            self.isAuthenticated = true
-            self.isBiometricAuthEnabled = true
+        if let token = notification.userInfo?["token"] {
+            AuthManager.shared.getUserInfo(accessToken: token as! String, completion: { [weak self] result in
+                    switch result {
+                    case .success(let user):
+                        let avatarURL = URL(string: user.avatarUrl)
+                        self?.username = "@\(user.login)"
+                        self?.avatarURL = avatarURL
+                        self?.isAuthenticated = true
+                        self?.isBiometricAuthEnabled = true
+                    case .failure(let error):
+                        print("Error getting access token: \(error.localizedDescription)")
+                    }
+                })
         }
     }
     
