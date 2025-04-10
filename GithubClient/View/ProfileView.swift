@@ -134,6 +134,7 @@ class ProfileViewModel: ObservableObject {
 
 struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
+    @AppStorage("isDarkMode") private var isDarkMode = false
 
     var body: some View {
         NavigationView {
@@ -193,7 +194,7 @@ struct ProfileView: View {
                 if viewModel.isBiometricAuthAvailable && !viewModel.isAuthenticated {
                     Button(action: viewModel.authenticateWithBiometrics) {
                         HStack {
-                            Image(systemName:"faceid")
+                            Image(systemName: "faceid")
                             Text(LocalizedStringKey("biometrics"))
                         }
                         .padding()
@@ -207,7 +208,9 @@ struct ProfileView: View {
                 Button(action: viewModel.handleLoginLogout) {
                     HStack {
                         Image(systemName: viewModel.isAuthenticated ? "lock.fill" : "person.fill")
-                        Text(viewModel.isAuthenticated ? LocalizedStringKey("logout") : LocalizedStringKey("login"))
+                        Text(
+                            viewModel.isAuthenticated
+                                ? LocalizedStringKey("logout") : LocalizedStringKey("login"))
                     }
                     .padding()
                     .background(viewModel.isAuthenticated ? Color.red : Color.green)
@@ -217,7 +220,17 @@ struct ProfileView: View {
                 .disabled(viewModel.isLoggingOut)
             }
             .padding()
-            .navigationTitle("tab.profile")
+            .navigationTitle(LocalizedStringKey("tab.profile"))
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isDarkMode.toggle()
+                    }) {
+                        Image(systemName: isDarkMode ? "moon.fill" : "sun.max.fill")
+                            .foregroundColor(.primary)
+                    }
+                }
+            }
             .sheet(isPresented: $viewModel.showSafari) {
                 SafariView(
                     url: URL(
