@@ -1,0 +1,52 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "tab.home" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "首页"
+          }
+        }
+      }
+    },
+    "tab.profile" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "个人主页"
+          }
+        }
+      }
+    },
+    "个人主页" : {
+
+    },
+    "仓库" : {
+
+    },
+    "启用生物识别" : {
+
+    },
+    "已启用生物识别" : {
+
+    },
+    "已认证" : {
+
+    },
+    "搜索仓库..." : {
+
+    },
+    "登出" : {
+
+    },
+    "登录" : {
+
+    }
+  },
+  "version" : "1.0"
+}

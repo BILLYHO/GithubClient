@@ -9,9 +9,26 @@ import SwiftUI
 
 @main
 struct GithubClientApp: App {
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabView {
+                HomeView()
+                    .tabItem {
+                        Label(LocalizedStringKey("tab.home"), systemImage: "house.fill")
+                    }
+                ProfileView()
+                    .tabItem {
+                        Label(LocalizedStringKey("tab.profile"), systemImage: "person.fill")
+                    }
+            }.onOpenURL { url in
+                print("Received URL: \(url)")
+                if url.absoluteString.starts(with: AuthManager.shared.redirectURI) {
+                    AuthManager.shared.handleCallback(url: url)
+                }
+              }
         }
     }
 }
+
+
