@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld" : {
+
+    },
     "tab.home" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -29,13 +32,16 @@
     "仓库" : {
 
     },
+    "关注中" : {
+
+    },
+    "关注者" : {
+
+    },
     "启用生物识别" : {
 
     },
     "已启用生物识别" : {
-
-    },
-    "已认证" : {
 
     },
     "搜索仓库..." : {
